@@ -205,7 +205,14 @@
 
 macro_rules! if_wasm {
     ($($item:item)*) => {$(
-        #[cfg(target_arch = "wasm32")]
+        #[cfg(all(target_arch = "wasm32", not(target_os="wasi")))]
+        $item
+    )*}
+}
+
+macro_rules! if_wasi {
+    ($($item:item)*) => {$(
+        #[cfg(target_os = "wasi")]
         $item
     )*}
 }
@@ -328,4 +335,18 @@ if_wasm! {
     pub use self::wasm::{Body, Client, ClientBuilder, Request, RequestBuilder, Response};
     #[cfg(feature = "multipart")]
     pub use self::wasm::multipart;
+}
+
+if_wasi! {
+    #[macro_use]
+    extern crate lazy_static;
+    mod util;
+    pub use self::async_impl::{
+        Body, Client, ClientBuilder, Request, RequestBuilder, Response,
+    };    
+    pub use self::proxy::Proxy;
+    mod async_impl;
+    mod connect;
+    mod proxy;
+    pub mod redirect;
 }

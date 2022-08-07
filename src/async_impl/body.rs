@@ -5,6 +5,11 @@ use std::task::{Context, Poll};
 
 use bytes::Bytes;
 use futures_core::Stream;
+#[cfg(target_os = "wasi")]
+use hyper::body::HttpBody;
+#[cfg(target_os = "wasi")]
+use hyper::body as http_body;
+#[cfg(not(target_os = "wasi"))]
 use http_body::Body as HttpBody;
 use pin_project_lite::pin_project;
 #[cfg(feature = "stream")]
