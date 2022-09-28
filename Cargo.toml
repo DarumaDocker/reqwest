@@ -117,7 +117,7 @@ lazy_static = "1.4"
 log = "0.4"
 mime = "0.3.16"
 percent-encoding = "2.1"
-tokio = { git = "https://github.com/WasmEdge/tokio.git", branch = "wasmedge", default-features = false, features = ["net", "time"] }
+tokio = { git = "https://github.com/WasmEdge/tokio.git", default-features = false, features = ["net", "time"] }
 pin-project-lite = "0.2.0"
 ipnet = "2.3"
 
@@ -167,7 +167,7 @@ serde = { version = "1.0", features = ["derive"] }
 libflate = "1.0"
 brotli_crate = { package = "brotli", version = "3.3.0" }
 doc-comment = "0.3"
-tokio = { git = "https://github.com/WasmEdge/tokio.git", branch = "wasmedge", default-features = false, features = ["macros", "rt"] }
+tokio = { git = "https://github.com/WasmEdge/tokio.git", default-features = false, features = ["macros", "rt"] }
 
 
 [target.'cfg(windows)'.dependencies]
