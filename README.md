@@ -1,20 +1,17 @@
-# reqwest
-
-[![crates.io](https://img.shields.io/crates/v/reqwest.svg)](https://crates.io/crates/reqwest)
-[![Documentation](https://docs.rs/reqwest/badge.svg)](https://docs.rs/reqwest)
-[![MIT/Apache-2 licensed](https://img.shields.io/crates/l/reqwest.svg)](./LICENSE-APACHE)
-[![CI](https://github.com/seanmonstar/reqwest/workflows/CI/badge.svg)](https://github.com/seanmonstar/reqwest/actions?query=workflow%3ACI)
+# reqwest for WebAssembly
 
 An ergonomic, batteries-included HTTP Client for Rust.
+This is a fork from the original [reqwest](https://github.com/seanmonstar/reqwest) with support for WebAssembly compilation target.
+That allows reqwest apps to run inside the [WasmEdge Runtime](https://github.com/WasmEdge/WasmEdge#readme) as a lightweight and secure alternative to natively compiled apps in Linux container.
+
+For more details and usage examples, please see the upstream [reqwest](https://github.com/seanmonstar/reqwest) source and [these examples](https://github.com/WasmEdge/wasmedge_reqwest_demo).
+
+Note: We do not yet support SSL / TLS connections in reqwest_wasi yet.
 
 - Plain bodies, JSON, urlencoded, multipart
 - Customizable redirect policy
 - HTTP Proxies
-- HTTPS via system-native TLS (or optionally, rustls)
 - Cookie Store
-- WASM
-- [Changelog](CHANGELOG.md)
-
 
 ## Example
 
@@ -23,8 +20,8 @@ optional features, so your `Cargo.toml` could look like this:
 
 ```toml
 [dependencies]
-reqwest = { version = "0.11", features = ["json"] }
-tokio = { version = "1", features = ["full"] }
+reqwest_wasi = { version = "0.11", features = ["json"] }
+tokio_wasi = { version = "1.21", features = ["full"] }
 ```
 
 And then the code:
@@ -34,7 +31,7 @@ use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let resp = reqwest::get("https://httpbin.org/ip")
+    let resp = reqwest::get("http://eu.httpbin.org/ip")
         .await?
         .json::<HashMap<String, String>>()
         .await?;
@@ -49,34 +46,19 @@ There is an optional "blocking" client API that can be enabled:
 
 ```toml
 [dependencies]
-reqwest = { version = "0.11", features = ["blocking", "json"] }
+reqwest_wasi = { version = "0.11", features = ["blocking", "json"] }
 ```
 
 ```rust,no_run
 use std::collections::HashMap;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let resp = reqwest::blocking::get("https://httpbin.org/ip")?
+    let resp = reqwest::blocking::get("http://eu.httpbin.org/ip")?
         .json::<HashMap<String, String>>()?;
     println!("{:#?}", resp);
     Ok(())
 }
 ```
-
-## Requirements
-
-On Linux:
-
-- OpenSSL 1.0.1, 1.0.2, 1.1.0, or 1.1.1 with headers (see https://github.com/sfackler/rust-openssl)
-
-On Windows and macOS:
-
-- Nothing.
-
-Reqwest uses [rust-native-tls](https://github.com/sfackler/rust-native-tls),
-which will use the operating system TLS framework if available, meaning Windows
-and macOS. On Linux, it will use OpenSSL 1.1.
-
 
 ## License
 
