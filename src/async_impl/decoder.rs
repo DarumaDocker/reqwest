@@ -17,6 +17,8 @@ use futures_core::Stream;
 use futures_util::stream::Peekable;
 use http::HeaderMap;
 use hyper::body::HttpBody;
+#[cfg(target_os = "wasi")]
+use hyper::body as http_body;
 
 #[cfg(any(feature = "gzip", feature = "brotli", feature = "deflate"))]
 use tokio_util::codec::{BytesCodec, FramedRead};
