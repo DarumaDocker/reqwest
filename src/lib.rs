@@ -343,6 +343,7 @@ if_wasi! {
     pub use self::proxy::Proxy;
     mod async_impl;
     mod connect;
+    pub mod dns;
     mod proxy;
     pub mod redirect;
 }
