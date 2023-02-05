@@ -13,9 +13,8 @@ edition = "2018"
 autotests = true
 
 [package.metadata.docs.rs]
-all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
-targets = ["x86_64-unknown-linux-gnu", "wasm32-unknown-unknown"]
+targets = ["wasm32-wasi", "wasm32-unknown-unknown"]
 
 [lib]
 name = "reqwest"
@@ -115,7 +114,7 @@ mime_guess = { version = "2.0", default-features = false, optional = true }
 [target.'cfg(target_os = "wasi")'.dependencies]
 encoding_rs = "0.8"
 http-body = "0.4.0"
-hyper_wasi = { version = "0.15.0", default-features = false, features = ["full"] }
+hyper_wasi = { version = "0.15", default-features = false, features = ["full"] }
 h2_wasi = "0.3.14"
 lazy_static = "1.4"
 log = "0.4"
