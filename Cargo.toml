@@ -1,6 +1,6 @@
 [package]
 name = "reqwest_wasi"
-version = "0.11.14" # remember to update html_root_url
+version = "0.11.15" # remember to update html_root_url
 description = "higher level HTTP client library"
 keywords = ["http", "request", "client"]
 categories = ["web-programming::http-client", "wasm"]
@@ -77,6 +77,9 @@ __rustls = ["hyper-rustls", "tokio-rustls", "rustls", "__tls", "rustls-pemfile"]
 
 # When enabled, disable using the cached SYS_PROXIES.
 __internal_proxy_sys_no_cache = []
+
+# Sets the maximum idle connection per host allowed in the pool to 0
+no-pool = []
 
 [dependencies]
 base64 = "0.21"

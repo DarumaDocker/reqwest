@@ -1407,15 +1407,43 @@ impl Client {
     ///
     /// Use `Client::builder()` if you wish to handle the failure as an `Error`
     /// instead of panicking.
+    #[cfg(not(feature = "no-pool"))]
     pub fn new() -> Client {
         ClientBuilder::new().build().expect("Client::new()")
+    }
+
+    /// Constructs a new `Client` with zero sized idle connection pool.
+    ///
+    /// # Panics
+    ///
+    /// This method panics if a TLS backend cannot be initialized, or the resolver
+    /// cannot load the system configuration.
+    ///
+    /// Use `Client::builder()` if you wish to handle the failure as an `Error`
+    /// instead of panicking.
+    #[cfg(feature = "no-pool")]
+    pub fn new() -> Client {
+        ClientBuilder::new()
+            .pool_max_idle_per_host(0)
+            .build()
+            .expect("Client::new()")
     }
 
     /// Creates a `ClientBuilder` to configure a `Client`.
     ///
     /// This is the same as `ClientBuilder::new()`.
+    #[cfg(not(feature = "no-pool"))]
     pub fn builder() -> ClientBuilder {
         ClientBuilder::new()
+    }
+
+    /// Creates a `ClientBuilder` with zero sized idle connection
+    /// pool to configure a `Client`.
+    ///
+    /// This is the same as `ClientBuilder::new()`.
+    #[cfg(feature = "no-pool")]
+    pub fn builder() -> ClientBuilder {
+        ClientBuilder::new().pool_max_idle_per_host(0)
     }
 
     /// Convenience method to make a `GET` request to a URL.
