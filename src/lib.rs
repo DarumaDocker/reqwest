@@ -346,4 +346,11 @@ if_wasi! {
     pub mod dns;
     mod proxy;
     pub mod redirect;
+    #[cfg(feature = "__tls")]
+    pub mod tls;
+    #[cfg(feature = "__tls")]
+    pub use tls::{Certificate, Identity};
+
+    #[cfg(feature = "multipart")]
+    pub use self::async_impl::multipart;
 }
