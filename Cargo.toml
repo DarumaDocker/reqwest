@@ -4,11 +4,12 @@ version = "0.11.16" # remember to update html_root_url
 description = "higher level HTTP client library"
 keywords = ["http", "request", "client"]
 categories = ["web-programming::http-client", "wasm"]
-repository = "https://github.com/seanmonstar/reqwest"
+repository = "https://github.com/wasmedge/reqwest"
 documentation = "https://docs.rs/reqwest"
 authors = [
     "Sean McArthur <sean@seanmonstar.com>",
     "Tricster <mediosrity@gmail.com>",
+    "csh <458761603@qq.com>",
 ]
 readme = "README.md"
 license = "MIT OR Apache-2.0"
