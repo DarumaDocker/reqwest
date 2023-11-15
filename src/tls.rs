@@ -72,6 +72,9 @@ impl Certificate {
     /// # }
     /// ```
     pub fn from_der(der: &[u8]) -> crate::Result<Certificate> {
+        #[cfg(feature = "wasmedge-tls")]
+        let _ = der;
+
         Ok(Certificate {
             #[cfg(feature = "native-tls-crate")]
             native: native_tls_crate::Certificate::from_der(der).map_err(crate::error::builder)?,
@@ -97,6 +100,9 @@ impl Certificate {
     /// # }
     /// ```
     pub fn from_pem(pem: &[u8]) -> crate::Result<Certificate> {
+        #[cfg(feature = "wasmedge-tls")]
+        let _ = pem;
+
         Ok(Certificate {
             #[cfg(feature = "native-tls-crate")]
             native: native_tls_crate::Certificate::from_pem(pem).map_err(crate::error::builder)?,
@@ -387,6 +393,8 @@ pub(crate) enum TlsBackend {
     Rustls,
     #[cfg(feature = "__rustls")]
     BuiltRustls(rustls::ClientConfig),
+    #[cfg(feature = "wasmedge-tls")]
+    WasmEdgeTls,
     #[cfg(any(feature = "native-tls", feature = "__rustls",))]
     UnknownPreconfigured,
 }
@@ -402,6 +410,8 @@ impl fmt::Debug for TlsBackend {
             TlsBackend::Rustls => write!(f, "Rustls"),
             #[cfg(feature = "__rustls")]
             TlsBackend::BuiltRustls(_) => write!(f, "BuiltRustls"),
+            #[cfg(feature = "wasmedge-tls")]
+            TlsBackend::WasmEdgeTls => write!(f, "WasmEdgeTls"),
             #[cfg(any(feature = "native-tls", feature = "__rustls",))]
             TlsBackend::UnknownPreconfigured => write!(f, "UnknownPreconfigured"),
         }
@@ -418,6 +428,11 @@ impl Default for TlsBackend {
         #[cfg(all(feature = "__rustls", not(feature = "default-tls")))]
         {
             TlsBackend::Rustls
+        }
+
+        #[cfg(all(feature = "wasmedge-tls", not(feature = "default-tls")))]
+        {
+            TlsBackend::WasmEdgeTls
         }
     }
 }
@@ -460,6 +475,7 @@ impl ServerCertVerifier for NoVerifier {
 
 #[cfg(test)]
 mod tests {
+    #[cfg(not(feature = "wasmedge-tls"))]
     use super::*;
 
     #[cfg(feature = "default-tls")]

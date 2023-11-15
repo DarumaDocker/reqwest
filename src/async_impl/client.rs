@@ -459,6 +459,19 @@ impl ClientBuilder {
                         config.nodelay,
                     )
                 }
+                #[cfg(feature = "wasmedge-tls")]
+                TlsBackend::WasmEdgeTls => {
+                    // Build TLS config
+                    let tls = wasmedge_rustls_api::ClientConfig::default();
+
+                    Connector::new_wasmedge_tls(
+                        http,
+                        tls,
+                        user_agent(&config.headers),
+                        config.local_address,
+                        config.nodelay,
+                    )
+                }
                 #[cfg(any(feature = "native-tls", feature = "__rustls",))]
                 TlsBackend::UnknownPreconfigured => {
                     return Err(crate::error::builder(
